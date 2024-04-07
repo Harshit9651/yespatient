@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Recognition</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>/* styles.css */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        
+        button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+        
+        #hospitalInfo {
+            margin-top: 20px;
+        }
+        </style>
+</head>
+<body>
+    <h1>Voice Recognition</h1>
+    <button id="voiceButton"><img src="voice_icon.png" alt="Voice Icon"></button>
+    <div id="hospitalInfo"></div>
+    
+    <script >
+        
+        const voiceButton = document.getElementById('voiceButton');
+        const hospitalInfo = document.getElementById('hospitalInfo');
+        
+        // Initialize the SpeechRecognition API
+        const recognition = new webkitSpeechRecognition();
+        
+        // Set recognition settings
+        recognition.continuous = false;
+        recognition.lang = 'en-US';
+        
+        // Event listener for the voice button
+        voiceButton.addEventListener('click', () => {
+            recognition.start();
+        });
+        
+        // Event listener for recognition results
+        recognition.onresult = (event) => {
+            const voiceText = event.results[0][0].transcript.trim();
+            
+            // Send the voice text to the backend
+            fetch('/search-hospital', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ query: voiceText })
+            })
+            .then(response => response.json())
+            .then(data => {
+                hospitalInfo.textContent = data.message;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                hospitalInfo.textContent = 'An error occurred. Please try again later.';
+            });
+        };
+        </script>
+</body>
+</html>
