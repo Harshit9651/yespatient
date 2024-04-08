@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2225138889895982"
+    crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .container {
+            width: 400px;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            font-weight: bold;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        /* CSS for role option */
+#role {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 16px;
+    appearance: none; /* Remove default arrow */
+    -webkit-appearance: none; /* Remove default arrow for WebKit browsers */
+    -moz-appearance: none; /* Remove default arrow for Mozilla browsers */
+    background-color: #fff; /* Background color */
+    color: #333; /* Text color */
+    cursor: pointer;
+}
+
+#role option {
+    background-color: #fff; /* Background color */
+    color: #333; /* Text color */
+}
+
+#role:focus {
+    outline: none; /* Remove focus outline */
+    border-color: #007bff; /* Border color on focus */
+}
+
+    </style>
+</head>
+<body>
+    <% if (messages.success) { %>
+        <div class="alert alert-success">
+            <%= messages.success %>
+        </div>
+    <% } %>
+    <% if (messages.error) { %>
+        <div class="alert alert-danger">
+            <%= messages.error %>
+        </div>
+    <% } %>
+    <div class="container">
+        <h2>Signup Form</h2>
+        <form id="signupForm" action="/sinUp" method="post">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="number">Number</label>
+                <input type="text" id="number" name="number" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+        
+      
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Signup</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
