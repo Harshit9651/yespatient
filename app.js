@@ -88,6 +88,9 @@ app.use(bodyParser.json());
  app.get('/addhospital',(req,res)=>{
     res.render('addhospital.ejs')
  })
+ app.get('/pincode',(req,res)=>{
+    res.render('pincode.ejs')
+ })
 
 
 
@@ -134,3 +137,7 @@ app.post('/search-hospital', async (req, res) => {
         res.status(500).json({ error: 'An error occurred while searching hospitals. Please try again later.' });
     }
 });
+app.post("/pincode_search",(req,res)=>{
+    const{pincode} = req.body;
+    console.log(pincode)
+})
