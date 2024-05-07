@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yes Patient - Home</title>
+  <title>Yes Patient - Search</title>
   <!-- Link Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <!-- Custom CSS -->
@@ -11,8 +11,6 @@
     body {
       font-family: 'Open Sans', sans-serif;
       background-color: #f8f9fa;
-      margin: 0;
-      padding: 0;
     }
 
     header {
@@ -58,40 +56,60 @@
       text-align: center;
     }
 
-    main h2 {
+    .search-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       margin-top: 40px;
     }
 
-    .ambulance-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 30px;
-    }
-
-    .ambulance-image {
-      flex: 1;
+    .search-option {
       width: 100%;
-      border-radius: 10px;
-      margin: 10px;
-    }
-
-    .ambulance-content {
-      flex: 1;
       padding: 20px;
-      text-align: left;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background-color: white;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
     }
 
-    /* Media Query for smaller screens */
-    @media (max-width: 768px) {
-      .ambulance-container {
-        flex-direction: column;
+    .search-option h4 {
+      margin-bottom: 10px;
+    }
+
+    .search-option input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    .btn-search {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      transition: background-color 0.3s;
+      font-size: 1em;
+    }
+
+    .btn-search:hover {
+      background-color: #218838;
+    }
+
+    /* Responsive Layout */
+    @media (min-width: 768px) {
+      .search-container {
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
       }
-      
-      .ambulance-content {
-        padding: 10px;
-        text-align: center;
+
+      .search-option {
+        width: 30%;
+        margin-bottom: 0;
       }
     }
 
@@ -156,74 +174,95 @@
 </head>
 <body>
 
-  <header>
-    <h1>Welcome to Yes Patient</h1>
-    <h3>Find and book appointments with government doctors easily.</h3>
-    <div class="cta-buttons">
-      <button class="btn btn-primary">Get Started</button>
-      <button class="btn btn-outline-light">Learn More</button>
-    </div>
-  </header>
+<header>
+  <h1>Welcome to Yes Patient</h1>
+  <h3>Find and book appointments with government doctors easily.</h3>
+  <div class="cta-buttons">
+    <button class="btn btn-primary">Get Started</button>
+    <button class="btn btn-outline-light">Learn More</button>
+  </div>
+</header>
 
-  <main class="container">
-    <h2>Our Services</h2>
-    <p>We provide a range of services to help you find and book appointments with doctors in government hospitals.</p>
-    <div class="ambulance-container">
-      <img src="https://images.pexels.com/photos/8948320/pexels-photo-8948320.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Ambulance" class="ambulance-image">
-      <div class="ambulance-content">
-        <h3>Emergency Services</h3>
-        <p>Dial 108 for government emergency services.</p>
-      </div>
-    </div>
-    <div class="ambulance-container">
-      <img src="https://images.pexels.com/photos/8948296/pexels-photo-8948296.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Janni Express" class="ambulance-image">
-      <div class="ambulance-content">
-        <h3>Janni Express</h3>
-        <p>Dial 101 for Janni Suraksha.</p>
-      </div>
-    </div>
-  </main>
-
-  <footer class="site-footer">
-    <div class="footer-container">
-      <div class="footer-branding">
-        <h3>Doctor Appointment</h3>
-        <p>Your health is our priority.</p>
-      </div>
-
-      <div class="footer-nav">
-        <h4>Quick Links</h4>
-        <ul>
-          <li><a href="#home">Home</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#about">About Us</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-contact">
-        <h4>Contact Us</h4>
-        <p>Email: info@doctorappointment.com</p>
-        <p>Phone: +1 (555) 123-4567</p>
-        <p>Address: 123 Main St, City, Country</p>
-      </div>
-
-      <div class="footer-social">
-        <h4>Follow Us</h4>
-        <a href="https://facebook.com" target="_blank">Facebook</a>
-        <a href="https://twitter.com" target="_blank">Twitter</a>
-        <a href="https://instagram.com" target="_blank">Instagram</a>
-      </div>
+<main>
+  <div class="search-container">
+    <div class="search-option">
+      <h4>Search by Pincode</h4>
+      <input type="text" placeholder="Enter Pincode" id="search-pincode">
+      <button class="btn-search" onclick="searchByPincode()">Search</button>
     </div>
 
-    <div class="footer-copyright">
-      <p>&copy; 2024 Doctor Appointment. All rights reserved.</p>
+    <div class="search-option">
+      <h4>Search by Hospital Name</h4>
+      <input type="text" placeholder="Enter Hospital Name" id="search-hospital">
+      <button class="btn-search" onclick="searchByHospital()">Search</button>
     </div>
-  </footer>
 
-  <!-- Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <div class="search-option">
+      <h4>Search by City</h4>
+      <input type="text" placeholder="Enter City Name" id="search-city">
+      <button class="btn-search" onclick="searchByCity()">Search</button>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-branding">
+      <h3>Doctor Appointment</h3>
+      <p>Your health is our priority.</p>
+    </div>
+
+    <div class="footer-nav">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-contact">
+      <h4>Contact Us</h4>
+      <p>Email: info@doctorappointment.com</p>
+      <p>Phone: +1 (555) 123-4567</p>
+      <p>Address: 123 Main St, City, Country</p>
+    </div>
+
+    <div class="footer-social">
+      <h4>Follow Us</h4>
+      <a href="https://facebook.com" target="_blank">Facebook</a>
+      <a href="https://twitter.com" target="_blank">Twitter</a>
+      <a href="https://instagram.com" target="_blank">Instagram</a>
+    </div>
+  </div>
+
+  <div class="footer-copyright">
+    <p>&copy; 2024 Doctor Appointment. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+  function searchByPincode() {
+    const pincode = document.getElementById("search-pincode").value;
+    alert("Searching by Pincode: " + pincode);
+  }
+
+  function searchByHospital() {
+    const hospital = document.getElementById("search-hospital").value;
+    alert("Searching by Hospital: " + hospital);
+  }
+
+  function searchByCity() {
+    const city = document.getElementById("search-city").value;
+    alert("Searching by City: " + city);
+  }
+</script>
+
 </body>
 </html>
