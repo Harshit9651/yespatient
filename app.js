@@ -1,11 +1,12 @@
 const express= require("express");
+const cors = require('cors');
 
 const dotenv = require('dotenv'); // Import dotenv package
 
 dotenv.config();
 
 const app = express();
-
+app.use(cors());
 
 const port = process.env.PORT ||3000;
 const path = require("path");
@@ -91,6 +92,9 @@ app.use(bodyParser.json());
  app.get('/pincode',(req,res)=>{
     res.render('pincode.ejs')
  })
+ app.get('/daily',(req,res)=>{
+    res.render('dailyadd.ejs')
+ })
 
 
 
@@ -116,7 +120,7 @@ app.use(bodyParser.json());
         res.status(500).send('An error occurred while adding hospital data. Please try again later.');
     }
 });
-// Route for handling hospital search
+// testing the data 
 app.post('/search-hospital', async (req, res) => {
     try {
         const userQuery = req.body.query.toLowerCase();
@@ -125,19 +129,60 @@ app.post('/search-hospital', async (req, res) => {
         const matchingHospitals = await Hospitals.find({ hospitalName: { $regex: userQuery, $options: 'i' } });
 
         if (matchingHospitals.length > 0) {
-            const message = matchingHospitals.map(hospital => {
-                return `Hospital Name: ${hospital.hospitalName}`;
-            }).join('\n');
-            res.json({ message: message });
+            res.json({ 
+                results: matchingHospitals.map(hospital => ({
+                    hospitalName: hospital.hospitalName,
+                    description: `Located in ${hospital.city}, ${hospital.state}`,
+                }))
+            });
         } else {
-            res.json({ message: 'No hospitals found matching your query.' });
+            res.json({ results: [] });
         }
     } catch (error) {
         console.error('Error occurred while searching hospitals:', error);
         res.status(500).json({ error: 'An error occurred while searching hospitals. Please try again later.' });
     }
 });
-app.post("/pincode_search",(req,res)=>{
-    const{pincode} = req.body;
-    console.log(pincode)
-})
+app.post('/search-city', async (req, res) => {
+    try {
+        const userQuery = req.body.query.toLowerCase();
+
+        const matchingHospitals = await Hospitals.find({ city: { $regex: userQuery, $options: 'i' } });
+
+        if (matchingHospitals.length > 0) {
+            res.json({ 
+                results: matchingHospitals.map(hospital => ({
+                    hospitalName: hospital.hospitalName,
+                    description: `Located in ${hospital.city}, ${hospital.state}`,
+                }))
+            });
+        } else {
+            res.json({ results: [] });
+        }
+    } catch (error) {
+        console.error('Error occurred while searching by city:', error);
+        res.status(500).json({ error: 'An error occurred while searching by city. Please try again later.' });
+    }
+});
+app.post('/search-pincode', async (req, res) => {
+    try {
+        const userQuery = req.body.query;
+
+        const matchingHospitals = await Hospitals.find({ pincode: userQuery });
+
+        if (matchingHospitals.length > 0) {
+            res.json({ 
+                results: matchingHospitals.map(hospital => ({
+                    hospitalName: hospital.hospitalName,
+                    description: `Located in ${hospital.city}, ${hospital.state}`,
+                }))
+            });
+        } else {
+            res.json({ results: [] });
+        }
+    } catch (error) {
+        console.error('Error occurred while searching by pincode:', error);
+        res.status(500).json({ error: 'An error occurred while searching by pincode. Please try again later.' });
+    }
+});
+
