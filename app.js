@@ -182,7 +182,7 @@ app.post('/search-pincode', async (req, res) => {
         }
     } catch (error) {
         console.error('Error occurred while searching by pincode:', error);
-        res.status(500).json({ error: 'An error occurred while searching by pincode. Please try again later.' });
+        res.status(500).json({ error: 'An error occurred while searching by pincode.Please try again later.' });
     }
-});
+}); 
 
