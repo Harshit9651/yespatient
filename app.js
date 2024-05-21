@@ -95,6 +95,9 @@ app.use(bodyParser.json());
  app.get('/daily',(req,res)=>{
     res.render('dailyadd.ejs')
  })
+ app.get('/learnmore',(req,res)=>{
+    res.render('readmore.ejs')
+ })
 
 
 
