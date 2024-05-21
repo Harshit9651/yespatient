@@ -98,6 +98,9 @@ app.use(bodyParser.json());
  app.get('/learnmore',(req,res)=>{
     res.render('readmore.ejs')
  })
+ app.get('/sinup',(req,res)=>{
+    res.render('sinup.ejs')
+ })
 
 
 
