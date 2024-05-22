@@ -194,33 +194,6 @@ app.get('/search/pincode', async (req, res) => {
     }
   });
   
- /*
-  app.get('/search/pincode', async (req, res) => {
-    const { pincode } = req.query;
-    try {
-      const hospitals = await Hospitals.find({ pincode: pincode }, { Image: 1, _id: 0 });
-      res.json(hospitals);
-    } catch (error) {
-      res.status(500).json({ error: 'An error occurred while searching by pincode.' });
-    }
-  });
-  
-  app.get('/search/hospital', async (req, res) => {
-    const { hospitalName } = req.query;
-    try {
-      const hospitals = await Hospitals.find({ hospitalName: new RegExp(hospitalName, 'i') }, { Image: 1, _id: 0 });
-      res.json(hospitals);
-    } catch (error) {
-      res.status(500).json({ error: 'An error occurred while searching by hospital name.' });
-    }
-  });
-  
-  app.get('/search/city', async (req, res) => {
-    const { city } = req.query;
-    try {
-      const hospitals = await Hospitals.find({ city: new RegExp(city, 'i') }, { Image: 1, _id: 0 });
-      res.json(hospitals);
-    } catch (error) {
-      res.status(500).json({ error: 'An error occurred while searching by city.' });
-    }
-  });*/
+ 
+
+ 
