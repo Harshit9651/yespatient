@@ -277,6 +277,7 @@
 
     </div>
   </header>
+
   <main>
     <div class="search-container">
       <div class="search-option">
@@ -336,7 +337,7 @@
       </div>
     </div>
     <div class="footer-button">
-     <a href="/sinup"> <button class="btn btn-primary"><i class="fa-solid fa-user-tie"></i> Admin</button></a>
+     <a href="/daily"> <button class="btn btn-primary"><i class="fa-solid fa-user-tie"></i> Admin</button></a>
     </div>
   
     <div class="footer-copyright">
@@ -352,24 +353,105 @@
 <!--link of font asome CDN-->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <script>
-    function searchByPincode() {
-      const pincode = document.getElementById('search-pincode').value;
-      alert('Searching for doctors in pincode: ' + pincode);
-      // Add your search logic here
-    }
+<script>
+  function searchByPincode() {
+    const pincode = document.getElementById('search-pincode').value;
+    fetch(`/search/pincode?pincode=${pincode}`)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        alert('Search results: ' + JSON.stringify(data));
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while searching.');
+      });
+  }
 
-    function searchByHospital() {
-      const hospital = document.getElementById('search-hospital').value;
-      alert('Searching for doctors in hospital: ' + hospital);
-      // Add your search logic here
-    }
+  function searchByHospital() {
+    const hospital = document.getElementById('search-hospital').value;
+    fetch(`/search/hospital?hospitalName=${hospital}`)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        alert('Search results: ' + JSON.stringify(data));
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while searching.');
+      });
+  }
 
-    function searchByCity() {
-      const city = document.getElementById('search-city').value;
-      alert('Searching for doctors in city: ' + city);
-      // Add your search logic here
-    }
-  </script>
+  function searchByCity() {
+    const city = document.getElementById('search-city').value;
+    fetch(`/search/city?city=${city}`)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        alert('Search results: ' + JSON.stringify(data));
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while searching.');
+      });
+  }
+  /*
+  function searchByPincode() {
+  const pincode = document.getElementById('search-pincode').value;
+  fetch(`/search/pincode?pincode=${pincode}`)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      displayResults(data);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('An error occurred while searching.');
+    });
+}
+
+function searchByHospital() {
+  const hospital = document.getElementById('search-hospital').value;
+  fetch(`/search/hospital?hospitalName=${hospital}`)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      displayResults(data);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('An error occurred while searching.');
+    });
+}
+
+function searchByCity() {
+  const city = document.getElementById('search-city').value;
+  fetch(`/search/city?city=${city}`)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      displayResults(data);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('An error occurred while searching.');
+    });
+}
+
+function displayResults(data) {
+  const resultsContainer = document.getElementById('results-container');
+  resultsContainer.innerHTML = '';
+  data.forEach(item => {
+    const img = document.createElement('img');
+    img.src = item.Image;
+    img.alt = 'Hospital Image';
+    img.style.width = '200px'; // Adjust the size as needed
+    img.style.height = '200px'; // Adjust the size as needed
+    resultsContainer.appendChild(img);
+  });
+}*/
+
+</script>
+
 </body>
 </html>

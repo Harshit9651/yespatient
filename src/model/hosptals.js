@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
   hospitalName:String,
-  image:String,
-  state:String,
+  Image:String,
+
   district:String,
   city:String,
   pincode:Number,
-  doctors:Number
+
 
 
 

@@ -64,12 +64,12 @@
 <body>
     <div class="container">
         <h1>Hospital Information Form</h1>
-        <form id="hospitalForm" action="/addhospitaldata" method="post" >
+        <form id="hospitalForm" action="/addhospitaldata" method="post" enctype="multipart/form-data" >
             <label for="hospitalName">Hospital Name:</label>
             <input type="text" id="hospitalName" name="hospitalName" required>
 
             <label for="imageUrl">Image URL:</label>
-            <input type="text" id="imageUrl" name="image" required>
+            <input type="file" id="imageUrl" name="Image" required>
             
                
                 </select>
