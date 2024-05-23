@@ -4,48 +4,31 @@ const { body, validationResult } = require('express-validator');
 const dotenv = require('dotenv'); // Import dotenv package
 const nodemailer = require('nodemailer');
 dotenv.config();
-
 const app = express();
 app.use(cors());
-
 const port = process.env.PORT ||3000;
 const path = require("path");
-
-
-
 const bycrpt = require("bcrypt");
-
-
-
 const publicDirectoryPath = path.join(__dirname, '../public')
 app.use(express.static(publicDirectoryPath))
 //const authenticate = require("./dhdhd/bfbbyf.js");
 const cookieParser = require('cookie-parser');
-const session = require("express-session")
 app.use(cookieParser());
 
 const flash = require('connect-flash');
 app.use(flash());
 require("./src/db/connect.js")
-/*app.listen(port,()=>{
-    console.log("server run successfully")
-})
-*/
-
 app. use(express.json());// for parsing 
 app.use(express.urlencoded({extended:true}))//data by id aa jaye 
 app.set("view engine","ejs");
 const static_path = path.join(__dirname,"../views");//pura path dena hota hai 
 app.use(express.static(static_path));
-//const methodoverride = require("method-override"); // for put patch and delete method
-//app.use(methodoverride("_method"));
+
 const ejsmate = require("ejs-mate");
 app.engine("ejs",ejsmate)
 
 app.use(express.static(path.join(__dirname,"../public")));
 
-
-const mongodbsession = require("connect-mongodb-session")(session)
 
 const bodyParser = require('body-parser');
 
@@ -69,18 +52,10 @@ cloudinary.config({
   api_key: '911397189256837',
   api_secret: '3u2KB4BndKIcxurUbB7hz9Lsy2s',
 });
-
-// Configure MongoDB connection
-
-// Create a simple mongoose schema
-
-
-
-
 // Configure multer to use Cloudinary as storage
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
-    folder: 'uploads', // Cloudinary folder where you want to store files
+    folder: 'uploads', 
     allowedFormats: ['jpg', 'png'],
 });
 
@@ -89,13 +64,15 @@ const upload = multer({ storage: storage });//kha save krna h
 
 const uploadToCloudinary = async (file) => {
     if (file && file.path) {
-      //const result = await cloudinary.uploader.upload(file.buffer.toString('base64'));
       const result = await cloudinary.uploader.upload(file.path);
       return result.secure_url;
     } else {
       throw new Error('File buffer is undefined or null');
     }
   };
+
+
+////////////// session store data ///////////////
 
 
 
@@ -183,74 +160,76 @@ app.get('/search/pincode', async (req, res) => {
 
 
   const randomCode = Math.floor(100000 + Math.random() * 900000); // Generate a random 6-digit code
-  app.post('/sinUp', [
-    // Validate and sanitize inputs
-    body('name').trim().notEmpty().withMessage('Enter Name'),
-    body('grId').trim().notEmpty().withMessage('GR Id is required'),
-    body('hospitalName').trim().notEmpty().withMessage('Hospital Name is required'),
-    body('hospitalArea').trim().notEmpty().withMessage('Area of Hospital is required'),
-    body('chmo').trim().notEmpty().withMessage('CHMO of Hospital is required'),
-    body('phoneNumber').trim().isMobilePhone().withMessage('Valid phone number is required'),
-    body('email').isEmail().withMessage('Valid email is required').normalizeEmail(),
-    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
-  ], async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
   
-    // Destructure req.body
-    const { name, grId, hospitalName, hospitalArea, chmo, phoneNumber, email, password, terms } = req.body;
-  
-    try {
-      // Hash the password
-      const hashedPassword = await bycrpt.hash(password, 10); // Hash with salt rounds of 10
-  
-      // Create a new Sinupdata document with hashed password
-      const usersinup = new SinUpData({
-        name,
-        grId,
-        hospitalName,
-        hospitalArea,
-        chmo,
-        phoneNumber,
-        email,
-        password: hashedPassword, // Save the hashed password
-        terms,
-        verificationCode: randomCode // Add verification code to the document
-      });
-  
-      // Save the document to the database
-      const sinupdatasave = await usersinup.save();
-      console.log(sinupdatasave);
-  
-      // Respond with success message
-      res.status(200).json({ message: 'Signup successful' });
-       // Create reusable transporter object using the default SMTP transport
-       let transporter = nodemailer.createTransport({
-        service: 'Gmail',
-        port:465,
-        logger:true,
-        debug:true,
-        secure:true,
-        secureConnection:false,
+app.post('/sinUp', [
+  // Validate and sanitize inputs
+  body('name').trim().isAlpha('en-US', { ignore: ' ' }).withMessage('Enter a valid name with alphabetic characters only.'),
+  body('grId').trim().isAlphanumeric().withMessage('GR Id should contain only alphanumeric characters.'),
+  body('hospitalName').trim().matches(/^[a-zA-Z0-9 ]+$/).withMessage('Hospital Name should contain only alphanumeric characters and spaces.'),
+  body('hospitalArea').trim().matches(/^[a-zA-Z0-9 ]+$/).withMessage('Area of Hospital should contain only alphanumeric characters and spaces.'),
+  body('chmo').trim().isAlpha('en-US', { ignore: ' ' }).withMessage('CHMO of Hospital should contain only alphabetic characters.'),
+  body('phoneNumber').trim().isMobilePhone().withMessage('Valid phone number is required.'),
+  body('email').isEmail().withMessage('Valid email is required').normalizeEmail(),
+  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
 
-        auth: {
-          user: 'dremersio@gmail.com', // Your Gmail email address
-          pass: 'fdmp qqny iupt yfly'
-        },
-        tls:{
-            rejectUnAuthorized:true,
-        }
+  // Destructure req.body
+  const { name, grId, hospitalName, hospitalArea, chmo, phoneNumber, email, password, terms } = req.body;
+
+  try {
+    // Hash the password
+    const hashedPassword = await bycrpt.hash(password, 10); // Hash with salt rounds of 10
+
+    // Create a new Sinupdata document with hashed password
+    const usersinup = new SinUpData({
+      name,
+      grId,
+      hospitalName,
+      hospitalArea,
+      chmo,
+      phoneNumber,
+      email,
+      password: hashedPassword, // Save the hashed password
+      terms,
+      verificationCode: randomCode // Add verification code to the document
+    });
+
+    // Save the document to the database
+    const sinupdatasave = await usersinup.save();
+    console.log(sinupdatasave);
+
+    // Respond with success message
+    res.status(200).json({ message: 'Signup successful' });
+    
+    // Create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      port: 465,
+      logger: true,
+      debug: true,
+      secure: true,
+      secureConnection: false,
+
+      auth: {
+        user: 'dremersio@gmail.com', // Your Gmail email address
+        pass: 'fdmp qqny iupt yfly'
+      },
+      tls: {
+        rejectUnAuthorized: true,
+      }
     });
 
     let mailOptions = {
-        from: 'dremersio@gmail.com', // Sender address
-        to: email, // List of receivers
-        subject: 'Welcome to Dremers', // Subject line
-        html:`<p>Dear ${name},</p>
+      from: 'dremersio@gmail.com', // Sender address
+      to: email, // List of receivers
+      subject: 'Welcome to Dremers', // Subject line
+      html: `<p>Dear ${name},</p>
         <p>You have successfully signed up with YesPatient.</p>
-        <p>A verification code has been sent to your email <B> ${randomCode}</b>. Please remember to keep it safe as you will need it during login for authentication.</p>
+        <p>A verification code has been sent to your email <B>${randomCode}</b>. Please remember to keep it safe as you will need it during login for authentication.</p>
         <p>YesPatient is a unique platform dedicated to fostering the dreams of ambitious healthcare professionals who aspire for greater heights but are hindered by various constraints. As a user, you have the opportunity to access a range of healthcare services and resources tailored to your needs.</p>
         <p>At YesPatient, we believe in the power of technology to transform healthcare delivery and improve patient outcomes. We provide a platform where healthcare providers can connect, collaborate, and access innovative solutions to enhance their practice and better serve their patients.</p>
         <p>Whether you are a healthcare professional seeking support or a patient looking for quality care, YesPatient welcomes you to join our mission of revolutionizing healthcare delivery. Together, we can create a healthier and more connected future for patients and providers alike.</p>
@@ -258,28 +237,26 @@ app.get('/search/pincode', async (req, res) => {
         <p>Warm regards,</p>
         <p>Harshit Sharma<br>
         Founder of YesPatient <br>
-        YesPatient Team</p>`
-         // HTML formatted body
+        YesPatient Team</p>` // HTML formatted body
     };
+
     // Send email
     transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log(error);
-            res.status(500).send('Error sending email');
-        } else {
-            console.log('Email sent: ' + info.response);
-            req.flash('success', 'Welcome ' + name + '! You have successfully signed up.');
-            res.redirect('/')
-        }
+      if (error) {
+        console.log(error);
+        res.status(500).send('Error sending email');
+      } else {
+        console.log('Email sent: ' + info.response);
+        req.flash('success', 'Welcome ' + name + '! You have successfully signed up.');
+        res.redirect('/');
+      }
     });
 
-      
-     
-    } catch (error) {
-      console.error('Error saving user:', error);
-      res.status(500).json({ error: 'Error saving user' });
-    }
-  });
+  } catch (error) {
+    console.error('Error saving user:', error);
+    res.status(500).json({ error: 'Error saving user' });
+  }
+});
   //Sinin Post resquect 
   app.post('/signIn', [
     body('verificationCode').isNumeric().withMessage('Verification Code must be a number').isLength({ min: 6, max: 6 }).withMessage('Verification Code must be 6 digits long'),
