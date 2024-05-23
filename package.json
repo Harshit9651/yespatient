@@ -39,7 +39,7 @@
     "chokidar": "^3.6.0",
     "chownr": "^2.0.0",
     "cliui": "^8.0.1",
-    "cloudinary": "^2.2.0",
+    "cloudinary": "^1.21.0",
     "color-convert": "^2.0.1",
     "color-name": "^1.1.4",
     "color-support": "^1.1.3",
