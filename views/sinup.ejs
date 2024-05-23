@@ -6,8 +6,8 @@
     <title>Signup Form</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0; /* Light gray background */
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
             margin: 0;
             padding: 0;
             display: flex;
@@ -17,17 +17,24 @@
         }
         
         .container {
-            width: 400px;
+            width: 90%;
+            max-width: 400px;
             background-color: #fff;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
         }
         
         h2 {
             text-align: center;
             margin-bottom: 20px;
-            color: #005a8e; /* Dark blue heading color */
+            color: #005a8e;
         }
         
         .form-group {
@@ -36,24 +43,35 @@
         
         label {
             font-weight: bold;
-            color: #333; /* Dark gray label color */
+            color: #333;
+            display: block;
+            margin-bottom: 5px;
         }
         
         input[type="text"],
         input[type="email"],
-        input[type="password"] {
+        input[type="password"],
+        input[type="tel"] {
             width: 100%;
             padding: 10px;
             border-radius: 5px;
             border: 1px solid #ccc;
             box-sizing: border-box;
             font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="tel"]:focus {
+            border-color: #005a8e;
         }
         
         button[type="submit"] {
             width: 100%;
             padding: 10px;
-            background-color: #005a8e; /* Dark blue button color */
+            background-color: #005a8e;
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -63,21 +81,53 @@
         }
         
         button[type="submit"]:hover {
-            background-color: #003d5c; /* Darker blue on hover */
+            background-color: #003d5c;
         }
+        
         .signin-link {
             text-align: center;
             margin-top: 20px;
         }
         
         .signin-link a {
-            color: #282e85; /* Dark blue link color */
-           
+            color: #282e85;
             font-weight: bold;
+            transition: color 0.3s ease;
         }
         
         .signin-link a:hover {
+            color: #005a8e;
             text-decoration: underline;
+        }
+
+        .terms {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .terms input {
+            margin-right: 10px;
+        }
+
+        .terms label {
+            color: #555;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            input[type="text"],
+            input[type="email"],
+            input[type="password"],
+            input[type="tel"],
+            button[type="submit"] {
+                font-size: 14px;
+                padding: 8px;
+            }
         }
     </style>
 </head>
@@ -90,12 +140,24 @@
                 <input type="text" id="name" name="name" required>
             </div>
             <div class="form-group">
-                <label for="number">GR Id</label>
-                <input type="text" id="number" name="Enter your GR Id" placeholder="GR I'D " required>
+                <label for="grId">GR Id</label>
+                <input type="text" id="grId" name="grId" placeholder="GR ID" required>
             </div>
             <div class="form-group">
-                <label for="number">Number</label>
-                <input type="text" id="number" name="number" required>
+                <label for="hospitalName">Hospital Name</label>
+                <input type="text" id="hospitalName" name="hospitalName" required>
+            </div>
+            <div class="form-group">
+                <label for="hospitalArea">Area of Hospital</label>
+                <input type="text" id="hospitalArea" name="hospitalArea" required>
+            </div>
+            <div class="form-group">
+                <label for="chmo">CHMO Of Hospital</label>
+                <input type="text" id="chmo" name="chmo" required>
+            </div>
+            <div class="form-group">
+                <label for="phoneNumber">Number</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber" required>
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
@@ -105,7 +167,10 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
             </div>
-           
+            <div class="terms">
+                <input type="checkbox" id="terms" name="terms" required>
+                <label for="terms">I agree to the terms and conditions. Providing false information may result in legal action.</label>
+            </div>
             <div class="form-group">
                 <button type="submit">Signup</button>
             </div>
