@@ -67,7 +67,7 @@ const uploadToCloudinary = async (file) => {
       const result = await cloudinary.uploader.upload(file.path);
       return result.secure_url;
     } else {
-      throw new Error('File buffer is undefined or null');
+      throw new Error('File buffer is undefined or null or blocked ');
     }
   };
 
