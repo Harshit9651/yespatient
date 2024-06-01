@@ -1,12 +1,12 @@
 const express= require("express");
 const cors = require('cors');
 const { body, validationResult } = require('express-validator');
-const dotenv = require('dotenv'); // Import dotenv package
+
 const nodemailer = require('nodemailer');
-dotenv.config();
+require('dotenv').config();
 const app = express();
 app.use(cors());
-const port = process.env.PORT ||3000;
+const port = process.env.PORT;
 const path = require("path");
 const bycrpt = require("bcrypt");
 const publicDirectoryPath = path.join(__dirname, '../public')
