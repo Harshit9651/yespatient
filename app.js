@@ -49,9 +49,9 @@ const cloudinary = require('cloudinary').v2;
 
 // Configure Cloudinary
 cloudinary.config({
-  cloud_name:'drxgaesoh',
-  api_key: '911397189256837',
-  api_secret: '3u2KB4BndKIcxurUbB7hz9Lsy2s',
+  cloud_name:process.env.CLOUDNAME,
+  api_key: process.env.API_KEY,
+api_secret: process.env.API_SECREAT,
 });
 // Configure multer to use Cloudinary as storage
 const storage = new CloudinaryStorage({
@@ -216,8 +216,9 @@ app.post('/sinUp', [
       secureConnection: false,
 
       auth: {
-        user: 'dremersio@gmail.com', // Your Gmail email address
-        pass: 'fdmp qqny iupt yfly'
+
+user: process.env.USERNAMEEMAIL, 
+        pass: process.env.USERPASSWORDEMAIL
       },
       tls: {
         rejectUnAuthorized: true,
@@ -225,7 +226,7 @@ app.post('/sinUp', [
     });
 
     let mailOptions = {
-      from: 'dremersio@gmail.com', // Sender address
+      from:process.env.USERNAMEEMAIL , // Sender address
       to: email, // List of receivers
       subject: 'Welcome to Dremers', // Subject line
       html: `<p>Dear ${name},</p>
