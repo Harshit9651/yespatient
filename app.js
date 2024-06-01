@@ -9,6 +9,7 @@ app.use(cors());
 const port = process.env.PORT;
 const path = require("path");
 const bycrpt = require("bcrypt");
+const cron = require('node-cron');
 const publicDirectoryPath = path.join(__dirname, '../public')
 app.use(express.static(publicDirectoryPath))
 //const authenticate = require("./dhdhd/bfbbyf.js");
@@ -318,5 +319,15 @@ const newhashpassword =  await bycrpt.hash(newPassword,10)
   } catch (err) {
     console.error('Error resetting password:', err);
     res.status(500).json({ errors: [{ msg: 'Server error' }] });
+  }
+});
+cron.schedule('0 * * * *', async () => {
+  try {
+    const result = await Hospitals.deleteMany({
+      createdAt: { $lte: new Date(Date.now() - 24 * 60 * 60 * 1000) }
+    });
+    console.log('Deleted old daily data:', result);
+  } catch (error) {
+    console.error('Error deleting old daily data:', error);
   }
 });
