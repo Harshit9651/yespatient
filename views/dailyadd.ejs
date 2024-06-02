@@ -8,55 +8,97 @@
     <style>
         /* CSS styles */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
             margin: 0;
             padding: 0;
+            color: #333;
         }
 
         .container {
             max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
             text-align: center;
             margin-bottom: 20px;
+            color: #007bff;
+            font-size: 24px;
         }
 
         label {
             display: block;
             margin-bottom: 8px;
+            font-weight: bold;
         }
 
         input[type="text"],
         input[type="url"],
         input[type="tel"],
         input[type="number"],
+        input[type="file"],
         select {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-bottom: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
+            font-size: 14px;
+            color: #555;
+            transition: border-color 0.3s;
         }
 
-        button {
+        input[type="text"]:focus,
+        input[type="url"]:focus,
+        input[type="tel"]:focus,
+        input[type="number"]:focus,
+        input[type="file"]:focus,
+        select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        input[type="file"] {
+            padding: 0;
+        }
+
+        input[type="file"]::file-selector-button {
             background-color: #007bff;
             color: #fff;
-            padding: 10px 20px;
+            padding: 12px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        button {
+            width: 100%;
+            background-color: #007bff;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s;
         }
 
         button:hover {
             background-color: #0056b3;
+            transform: translateY(-2px);
         }
     </style>
 </head>
@@ -64,70 +106,62 @@
 <body>
     <div class="container">
         <h1>Hospital Information Form</h1>
-        <form id="hospitalForm" action="/addhospitaldata" method="post" enctype="multipart/form-data" >
+        <form id="hospitalForm" action="/addhospitaldata" method="post" enctype="multipart/form-data">
             <label for="hospitalName">Hospital Name:</label>
             <input type="text" id="hospitalName" name="hospitalName" required>
 
             <label for="imageUrl">Image URL:</label>
             <input type="file" id="imageUrl" name="Image" required>
-            
-               
-                </select>
-                
 
-                <label for="district">District:</label>
-                <select id="district" name="district" required>
-                    <option value="">Select a district</option>
-                    <option value="Ajmer">Ajmer</option>
-                    <option value="Alwar">Alwar</option>
-                    <option value="Banswara">Banswara</option>
-                    <option value="Baran">Baran</option>
-                    <option value="Barmer">Barmer</option>
-                    <option value="Bharatpur">Bharatpur</option>
-                    <option value="Bhilwara">Bhilwara</option>
-                    <option value="Bikaner">Bikaner</option>
-                    <option value="Bundi">Bundi</option>
-                    <option value="Chittorgarh">Chittorgarh</option>
-                    <option value="Churu">Churu</option>
-                    <option value="Dausa">Dausa</option>
-                    <option value="Dholpur">Dholpur</option>
-                    <option value="Dungarpur">Dungarpur</option>
-                    <option value="Hanumangarh">Hanumangarh</option>
-                    <option value="Jaipur">Jaipur</option>
-                    <option value="Jaisalmer">Jaisalmer</option>
-                    <option value="Jalore">Jalore</option>
-                    <option value="Jhalawar">Jhalawar</option>
-                    <option value="Jhunjhunu">Jhunjhunu</option>
-                    <option value="Jodhpur">Jodhpur</option>
-                    <option value="Karauli">Karauli</option>
-                    <option value="Kota">Kota</option>
-                    <option value="Nagaur">Nagaur</option>
-                    <option value="Pali">Pali</option>
-                    <option value="Pratapgarh">Pratapgarh</option>
-                    <option value="Rajsamand">Rajsamand</option>
-                    <option value="Sawai Madhopur">Sawai Madhopur</option>
-                    <option value="Sikar">Sikar</option>
-                    <option value="Sirohi">Sirohi</option>
-                    <option value="Sri Ganganagar">Sri Ganganagar</option>
-                    <option value="Tonk">Tonk</option>
-                    <option value="Udaipur">Udaipur</option>
-                    <!-- Options for districts here -->
-                </select>
-                   
-            
-                
-            <label for="district">City:</label>
-            <input type="text" id="district" name="city" required>
+            <label for="district">District:</label>
+            <select id="district" name="district" required>
+                <option value="">Select a district</option>
+                <option value="Ajmer">Ajmer</option>
+                <option value="Alwar">Alwar</option>
+                <option value="Banswara">Banswara</option>
+                <option value="Baran">Baran</option>
+                <option value="Barmer">Barmer</option>
+                <option value="Bharatpur">Bharatpur</option>
+                <option value="Bhilwara">Bhilwara</option>
+                <option value="Bikaner">Bikaner</option>
+                <option value="Bundi">Bundi</option>
+                <option value="Chittorgarh">Chittorgarh</option>
+                <option value="Churu">Churu</option>
+                <option value="Dausa">Dausa</option>
+                <option value="Dholpur">Dholpur</option>
+                <option value="Dungarpur">Dungarpur</option>
+                <option value="Hanumangarh">Hanumangarh</option>
+                <option value="Jaipur">Jaipur</option>
+                <option value="Jaisalmer">Jaisalmer</option>
+                <option value="Jalore">Jalore</option>
+                <option value="Jhalawar">Jhalawar</option>
+                <option value="Jhunjhunu">Jhunjhunu</option>
+                <option value="Jodhpur">Jodhpur</option>
+                <option value="Karauli">Karauli</option>
+                <option value="Kota">Kota</option>
+                <option value="Nagaur">Nagaur</option>
+                <option value="Pali">Pali</option>
+                <option value="Pratapgarh">Pratapgarh</option>
+                <option value="Rajsamand">Rajsamand</option>
+                <option value="Sawai Madhopur">Sawai Madhopur</option>
+                <option value="Sikar">Sikar</option>
+                <option value="Sirohi">Sirohi</option>
+                <option value="Sri Ganganagar">Sri Ganganagar</option>
+                <option value="Tonk">Tonk</option>
+                <option value="Udaipur">Udaipur</option>
+                <!-- Options for districts here -->
+            </select>
+
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" required>
 
             <label for="pincode">Pincode:</label>
             <input type="tel" id="pincode" name="pincode" required>
 
-          
-
             <button type="submit">Submit</button>
         </form>
     </div>
-
 </body>
 
 </html>
+

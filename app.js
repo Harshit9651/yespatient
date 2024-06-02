@@ -6,6 +6,11 @@ const nodemailer = require('nodemailer');
 require('dotenv').config();
 const app = express();
 app.use(cors());
+const flash = require('connect-flash');
+app.use(flash());
+const session = require('express-session');
+
+
 const port = process.env.PORT;
 const path = require("path");
 const bycrpt = require("bcrypt");
@@ -16,8 +21,6 @@ app.use(express.static(publicDirectoryPath))
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
-const flash = require('connect-flash');
-app.use(flash());
 require("./src/db/connect.js")
 app. use(express.json());// for parsing 
 app.use(express.urlencoded({extended:true}))//data by id aa jaye 
@@ -36,6 +39,9 @@ const bodyParser = require('body-parser');
 const methodoverride = require("method-override"); // for put patch and delete method
 app.use(methodoverride("_method"));
 
+app.use(bodyParser.json());
+
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
@@ -51,7 +57,7 @@ const cloudinary = require('cloudinary').v2;
 cloudinary.config({
   cloud_name:process.env.CLOUDNAME,
   api_key: process.env.API_KEY,
-api_secret: process.env.API_SECREAT,
+api_secret: process.env.API_SECREAT
 });
 // Configure multer to use Cloudinary as storage
 const storage = new CloudinaryStorage({
@@ -73,24 +79,28 @@ const uploadToCloudinary = async (file) => {
   };
 
 
-////////////// session store data ///////////////
+////////////// flash message content  ///////////////
+app.use(session({
+  secret: 'this is yespatient ', // Replace 'your-secret-key' with a random string
+  resave: true,
+  saveUninitialized: true
+}));
 
-
-
+app.use((req, res, next) => {
+  // Flash message for successful sign in
+  res.locals.successSignInMsg = req.flash('successSignInMsg') || '';
+  // Flash message for successful sign up
+  res.locals.successSignUpMsg = req.flash('successSignUpMsg') || '';
+  // Flash message for successful hospital data addition
+  res.locals.successAddHospitalMsg = req.flash('successAddHospitalMsg') || '';
+  next();
+});
 
 
 ////////////////////////####### file imports ##########///////////////
 require('./src/db/connect.js')
 const Hospitals= require('./src/model/hosptals.js');
 const SinUpData = require('./src/model/sinupdata.js');
-
-
- 
-
-app.use(bodyParser.json());
-
-
-
 
  // Get  resquect //
 
@@ -202,7 +212,7 @@ app.post('/sinUp', [
     // Save the document to the database
     const sinupdatasave = await usersinup.save();
     console.log(sinupdatasave);
-
+    req.flash('successSignUpMsg', 'You signed up successfully!');
     // Respond with success message
     res.status(200).json({ message: 'Signup successful' });
     
@@ -284,6 +294,7 @@ user: process.env.USERNAMEEMAIL,
         if (!isMatch) {
             return res.status(400).json({ error: 'Invalid password' });
         }
+        req.flash('successSignInMsg', 'Welcome again!');
 
       // we redricet the next page 
         res.status(200).json({ message: 'Sign in successful' });
@@ -332,3 +343,38 @@ cron.schedule('0 * * * *', async () => {
     console.error('Error deleting old daily data:', error);
   }
 });
+
+// Define the route to add hospital data
+app.post('/addhospitaldata', 
+  upload.single('Image'),
+  [
+    body('hospitalName').notEmpty().withMessage('Hospital Name is required'),
+    body('district').notEmpty().withMessage('District is required'),
+    body('city').notEmpty().withMessage('City is required'),
+    body('pincode').isPostalCode('IN').withMessage('Valid Indian pincode is required')
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      const { hospitalName, district, city, pincode } = req.body;
+      const newHospital = new Hospitals({
+        hospitalName,
+        Image: result.secure_url,
+        district,
+        city,
+        pincode
+      });
+      await newHospital.save();
+      req.flash('successAddHospitalMsg', 'Hospital data saved successfully');
+      res.redirect('/')
+    } catch (error) {
+      console.error('Error saving hospital data:', error);
+      res.status(500).json({ error: 'Error saving hospital data' });
+    }
+  }
+);

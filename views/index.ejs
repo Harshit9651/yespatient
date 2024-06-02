@@ -317,12 +317,60 @@
       height: auto;
       border-radius: 8px;
     }
+    .flash-message {
+  padding: 10px;
+  margin-bottom: 20px;
+  margin-top: 20px; 
+
+}
+/* CSS for flash messages 
+
+
+.flash-message {
+  padding: 10px;
+  margin-bottom: 20px;
+  margin-top: 20px; 
+
+}
+
+.success {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+}
+
+.error {
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  color: #721c24;
+}
+*/
+
   </style>
 </head>
 <body>
+  <% if (typeof successSignInMsg !== 'undefined' && successSignInMsg.length > 0) { %>
+    <script>
+      displayFlashMessage('success', '<%= successSignInMsg %>');
+    </script>
+  <% } %>
+  
+  <% if (typeof successSignUpMsg !== 'undefined' && successSignUpMsg.length > 0) { %>
+    <script>
+      displayFlashMessage('success', '<%= successSignUpMsg %>');
+    </script>
+  <% } %>
+  
+  <% if (typeof successAddHospitalMsg !== 'undefined' && successAddHospitalMsg.length > 0) { %>
+    <script>
+      displayFlashMessage('success', '<%= successAddHospitalMsg %>');
+    </script>
+  <% } %>
+  
+
   <header>
-    <h1>Welcome to Yes Patient</h1>
-    <h3>Find and book appointments with government doctors easily.</h3>
+    <h1>Welcome to YesPatient</h1>
+    <h3>Check avebility of doctor in Govermnet hospital Easily </h3>
     <div class="cta-buttons">
     <!--  <button class="btn btn-primary">Get Started</button>-->
     <a href="/learnmore">
@@ -335,10 +383,10 @@
   <main>
     <div class="search-container">
       <div class="search-option">
-        <h4>Search by Pincode</h4>
+       <h4>Search by Pincode</h4>
         <div>
-          <input type="text" placeholder="Enter Pincode" id="search-pincode">
-          <button class="btn-search" onclick="searchByPincode()">Search</button>
+        <input type="text" placeholder="Enter Pincode" id="search-pincode">
+          <button class="btn-search" onclick="searchByPincode()">Search </button>
         </div>
       </div>
   
@@ -490,6 +538,22 @@
 
     openOverlay();
   }
+  // Function to display flash message and hide it after 4 seconds
+function displayFlashMessage(messageClass, message) {
+  const flashMessage = document.createElement('div');
+  flashMessage.className = `flash-message ${messageClass}`;
+  flashMessage.textContent = message;
+  document.body.appendChild(flashMessage);
+  
+  // Show flash message
+  flashMessage.style.display = 'block';
+
+  // Hide flash message after 4 seconds
+  setTimeout(() => {
+    flashMessage.style.display = 'none';
+  }, 4000); // 4 seconds in milliseconds
+}
+
 </script>
 
 </body>
