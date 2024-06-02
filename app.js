@@ -97,7 +97,16 @@ app.use((req, res, next) => {
 });
 
 
-////////////////////////####### file imports ##########///////////////
+////////////////////////####### mongodb code  ##########///////////////
+const mongodbsession = require("connect-mongodb-session")(session)
+const store = new mongodbsession({
+  uri:process.env.MONGODBATLS,
+  collection:"mysessions",
+ })
+
+
+
+////////////////////mongodb 
 require('./src/db/connect.js')
 const Hospitals= require('./src/model/hosptals.js');
 const SinUpData = require('./src/model/sinupdata.js');
