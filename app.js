@@ -104,17 +104,17 @@ const SinUpData = require('./src/model/sinupdata.js');
 
  // Get  resquect //
 
- app.get('/',(req,res)=>{
+app.get('/',(req,res)=>{
    
-    res.render('index.ejs')
+ res.render('index.ejs')
  })
- app.get('/Searchbycityname',(req,res)=>{
+ app.get('/searchbycityname',(req,res)=>{
     res.render('cityname.ejs')
  })
  app.get('/searchbyhospitalname',(req,res)=>{
   res.render('hospitalname.ejs')
 })
-app.get('/pincode',(req,res)=>{
+app.get('/searchbypincode',(req,res)=>{
   res.render('pincode.ejs')
 })
  app.get('/addhospital',(req,res)=>{
@@ -136,7 +136,9 @@ app.get('/pincode',(req,res)=>{
 app.get('/resetpassword',(req,res)=>{
   res.render('resetpassword.ejs')
 })
-
+app.get('/error',(req,res)=>{
+  res.render('error.ejs')
+})
  
 
  
@@ -144,7 +146,7 @@ app.get('/resetpassword',(req,res)=>{
 
 
 
-  const randomCode = Math.floor(100000 + Math.random() * 900000); // Generate a random 6-digit code
+const randomCode = Math.floor(100000 + Math.random() * 900000); // Generate a random 6-digit code
   
 app.post('/sinUp', [
   // Validate and sanitize inputs
@@ -352,3 +354,62 @@ app.post('/addhospitaldata',
     }
   }
 );
+// Validation function to check if a string contains only letters and spaces
+const isAlpha = (str) => /^[A-Za-z\s]+$/.test(str);
+
+// Route to handle POST requests for searching hospitals by city
+app.post("/searchbycity", async (req, res) => {
+  const { CityName } = req.body;
+  
+  // Validate city name
+  if (!isAlpha(CityName)) {
+    return res.status(400).json({ error: "City name should contain only letters and spaces" });
+  }
+
+  try {
+    const cityfind = await Hospitals.find({ city: CityName });
+    console.log(cityfind);
+    res.json(cityfind);
+  } catch (err) {
+    console.error("Error searching hospitals by city", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Route to handle POST requests for searching hospitals by name
+app.post("/searchbyhospitalname", async (req, res) => {
+  const { hospitalName } = req.body;
+  
+  // Validate hospital name
+  if (!isAlpha(hospitalName)) {
+    return res.status(400).json({ error: "Hospital name should contain only letters and spaces" });
+  }
+
+  try {
+    const hospitalnamefind = await Hospitals.find({ hospitalName: hospitalName });
+    console.log(hospitalnamefind);
+    res.json(hospitalnamefind);
+  } catch (err) {
+    console.error("Error searching hospitals by name", err);
+    res.status(500).render('error', { error: "Internal server error" });
+  }
+});
+
+// Route to handle POST requests for searching hospitals by pincode
+app.post("/searchbypincode", async (req, res) => {
+  const { pincode } = req.body;
+
+  // Validate pincode
+  if (!/^\d{6}$/.test(pincode)) {
+    res.status(500).render('error', { error: "Pincode must in 6 digit and in numerical form " });
+  }
+
+  try {
+    const pincodefind = await Hospitals.find({ pincode: pincode });
+    console.log(pincodefind);
+    res.json(pincodefind);
+  } catch (err) {
+    console.error("Error searching hospitals by pincode", err);
+    res.status(500).render('error', { error: "Internal server error" });
+  }
+});
