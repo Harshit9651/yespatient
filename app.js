@@ -108,15 +108,19 @@ const SinUpData = require('./src/model/sinupdata.js');
    
     res.render('index.ejs')
  })
- app.get('/ram',(req,res)=>{
-    res.render('test.ejs')
+ app.get('/Searchbycityname',(req,res)=>{
+    res.render('cityname.ejs')
  })
+ app.get('/searchbyhospitalname',(req,res)=>{
+  res.render('hospitalname.ejs')
+})
+app.get('/pincode',(req,res)=>{
+  res.render('pincode.ejs')
+})
  app.get('/addhospital',(req,res)=>{
     res.render('addhospital.ejs')
  })
- app.get('/pincode',(req,res)=>{
-    res.render('pincode.ejs')
- })
+
  app.get('/daily',(req,res)=>{
     res.render('dailyadd.ejs')
  })
@@ -133,36 +137,6 @@ app.get('/resetpassword',(req,res)=>{
   res.render('resetpassword.ejs')
 })
 
-app.get('/search/pincode', async (req, res) => {
-    const { pincode } = req.query;
-    try {
-      const hospitals = await Hospitals.find({ pincode: pincode });
-      res.json(hospitals);
-    } catch (error) {
-      res.status(500).json({ error: 'An error occurred while searching by pincode.' });
-    }
-  });
-  
-  app.get('/search/hospital', async (req, res) => {
-    const { hospitalName } = req.query;
-    try {
-      const hospitals = await Hospitals.find({ hospitalName: new RegExp(hospitalName, 'i') });
-      res.json(hospitals);
-    } catch (error) {
-      res.status(500).json({ error: 'An error occurred while searching by hospital name.' });
-    }
-  });
-  
-  app.get('/search/city', async (req, res) => {
-    const { city } = req.query;
-    try {
-      const hospitals = await Hospitals.find({ city: new RegExp(city, 'i') });
-      res.json(hospitals);
-    } catch (error) {
-      res.status(500).json({ error: 'An error occurred while searching by city.' });
-    }
-  });
-  
  
 
  

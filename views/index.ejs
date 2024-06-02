@@ -317,14 +317,8 @@
       height: auto;
       border-radius: 8px;
     }
-    .flash-message {
-  padding: 10px;
-  margin-bottom: 20px;
-  margin-top: 20px; 
 
-}
-/* CSS for flash messages 
-
+/* CSS for flash messages */
 
 .flash-message {
   padding: 10px;
@@ -344,7 +338,52 @@
   border-color: #f5c6cb;
   color: #721c24;
 }
-*/
+
+.search-option {
+  width: 100%;
+  padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.search-option .btn-search {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  transition: background-color 0.3s;
+  font-size: 1em;
+}
+
+.search-option .btn-search:hover {
+  background-color: #218838;
+}
+
+/* Responsive Layout */
+@media (min-width: 768px) {
+  .search-container {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .search-option {
+    width: 30%;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .search-option .btn-search {
+    padding: 15px 20px;
+  }
+}
+
 
   </style>
 </head>
@@ -379,7 +418,7 @@
 
     </div>
   </header>
-
+<!--
   <main>
     <div class="search-container">
       <div class="search-option">
@@ -406,7 +445,22 @@
         </div>
       </div>
     </div>
-  </main> 
+  </main> -->
+  <main>
+    <div class="search-container">
+      <div class="search-option">
+        <a href="/pincode"><button class="btn-search">Search by Pincode</button></a>
+      </div>
+  
+      <div class="search-option">
+       <a href="/searchbyhospitalname"> <button class="btn-search" >Search by Hospital Name</button></a>
+      </div>
+  
+      <div class="search-option">
+       <a href="/searchbycityname"> <button class="btn-search">Search by City Name</button></a>
+      </div>
+    </div>
+  </main>
   <footer class="site-footer">
     <div class="footer-container">
       <div class="footer-branding">

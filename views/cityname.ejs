@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>City Search</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      text-align: center;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .input-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    input[type="text"] {
+      padding: 12px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+      width: 300px;
+      font-size: 16px;
+      margin-right: 10px;
+      transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #4CAF50;
+    }
+
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    @media (max-width: 768px) {
+      input[type="text"] {
+        width: calc(100% - 20px);
+        margin-right: 0;
+        margin-bottom: 10px;
+      }
+      input[type="submit"] {
+        width: calc(100% - 20px);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1> Search by City Name </h1>
+  <form action="/Searchbycity" method="get" class="input-container">
+    <input type="text" name="CityName" placeholder="Enter City Name " required>
+    <input type="submit" value="Search">
+  </form>
+</div>
+
+</body>
+</html>
