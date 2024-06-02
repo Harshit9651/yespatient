@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Optional custom styles */
+        .hospital-card {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <% data.forEach(hospital => { %>
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="card hospital-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Hospital: <%= hospital.hospitalName %></h5>
+                            <img src="<%= hospital.Image %>" class="card-img-top" style="max-height: 200px; object-fit: cover;" alt="Hospital Image">
+                            <p class="card-text">Pincode: <%= hospital.pincode %></p>
+                            <p class="card-text">District: <%= hospital.district %></p>
+                            <p class="card-text">City: <%= hospital.city %></p>
+                            <p class="card-text">Date: <%= hospital.createdAt %></p>
+                            <a href="#" onclick="downloadImage('<%= hospital.Image %>')" class="btn btn-success">Download Image</a>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function downloadImage(imageUrl) {
+            var link = document.createElement("a");
+            link.href = imageUrl;
+            link.download = "hospital_image.jpg";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>

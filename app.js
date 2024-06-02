@@ -139,6 +139,9 @@ app.get('/resetpassword',(req,res)=>{
 app.get('/error',(req,res)=>{
   res.render('error.ejs')
 })
+app.get('/showfile',(req,res)=>{
+  res.render('showfile.ejs')
+})
  
 
  
@@ -289,7 +292,7 @@ app.post('/ResetPassword', [
 ], async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({ error: errors.array() });
   }
 
   const { verificationCode, email, newPassword } = req.body;
@@ -297,7 +300,7 @@ app.post('/ResetPassword', [
   try {
     const user = await SinUpData.findOne({ verificationCode, email });
     if (!user) {
-      return res.status(400).json({ errors: [{ msg: 'Invalid verification code or email' }] });
+      return res.status(400).render({ error: [{ msg: 'Invalid verification code or email' }] });
     }
 const newhashpassword =  await bycrpt.hash(newPassword,10)
     user.password = newhashpassword; 
@@ -306,7 +309,7 @@ const newhashpassword =  await bycrpt.hash(newPassword,10)
     res.status(200).json({ msg: 'Password reset successful' });
   } catch (err) {
     console.error('Error resetting password:', err);
-    res.status(500).json({ errors: [{ msg: 'Server error' }] });
+    res.status(500).render({ error: [{ msg: 'Server error' }] });
   }
 });
 cron.schedule('0 * * * *', async () => {
@@ -332,7 +335,7 @@ app.post('/addhospitaldata',
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(500).render({ error: errors.array() });
     }
 
     try {
@@ -350,7 +353,7 @@ app.post('/addhospitaldata',
       res.redirect('/')
     } catch (error) {
       console.error('Error saving hospital data:', error);
-      res.status(500).json({ error: 'Error saving hospital data' });
+      res.status(500).render({ error: 'Error saving hospital data' });
     }
   }
 );
@@ -363,16 +366,17 @@ app.post("/searchbycity", async (req, res) => {
   
   // Validate city name
   if (!isAlpha(CityName)) {
-    return res.status(400).json({ error: "City name should contain only letters and spaces" });
+    return res.status(500).render({ error: "City name should contain only letters and spaces" });
   }
 
   try {
-    const cityfind = await Hospitals.find({ city: CityName });
-    console.log(cityfind);
-    res.json(cityfind);
+    const data = await Hospitals.find({ city: CityName });
+    console.log(data);
+ 
+    res.render('showfile.ejs', { data });
   } catch (err) {
     console.error("Error searching hospitals by city", err);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).render({ error: "Internal server error" });
   }
 });
 
@@ -382,13 +386,14 @@ app.post("/searchbyhospitalname", async (req, res) => {
   
   // Validate hospital name
   if (!isAlpha(hospitalName)) {
-    return res.status(400).json({ error: "Hospital name should contain only letters and spaces" });
+    return res.status(500).render({ error: "Hospital name should contain only letters and spaces" });
   }
 
   try {
-    const hospitalnamefind = await Hospitals.find({ hospitalName: hospitalName });
-    console.log(hospitalnamefind);
-    res.json(hospitalnamefind);
+    const data = await Hospitals.find({ hospitalName: hospitalName });
+    console.log(data);
+    res.render('showfile.ejs', { data });
+    
   } catch (err) {
     console.error("Error searching hospitals by name", err);
     res.status(500).render('error', { error: "Internal server error" });
@@ -401,13 +406,14 @@ app.post("/searchbypincode", async (req, res) => {
 
   // Validate pincode
   if (!/^\d{6}$/.test(pincode)) {
-    res.status(500).render('error', { error: "Pincode must in 6 digit and in numerical form " });
+    res.status(500).render('error', { error: "Pincode must be 6 digits and in numerical form" });
+    return; // Add a return statement to exit the function after sending the error response
   }
 
   try {
-    const pincodefind = await Hospitals.find({ pincode: pincode });
-    console.log(pincodefind);
-    res.json(pincodefind);
+    const data = await Hospitals.find({ pincode: pincode });
+    console.log(data);
+    res.render('showfile.ejs', { data }); // Using status code 302 for temporary redirect
   } catch (err) {
     console.error("Error searching hospitals by pincode", err);
     res.status(500).render('error', { error: "Internal server error" });
