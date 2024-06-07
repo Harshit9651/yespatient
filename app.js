@@ -17,7 +17,7 @@ const bycrpt = require("bcrypt");
 const cron = require('node-cron');
 const publicDirectoryPath = path.join(__dirname, '../public')
 app.use(express.static(publicDirectoryPath))
-//const authenticate = require("./dhdhd/bfbbyf.js");
+
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 

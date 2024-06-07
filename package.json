@@ -2,7 +2,7 @@
   "name": "yespatient",
   "version": "1.0.0",
   "description": "a complete doctelo site ",
-  "main": "app.js",
+  "main": "cluster.js",
   "dependencies": {
     "abbrev": "^1.1.1",
     "abort-controller": "^3.0.0",

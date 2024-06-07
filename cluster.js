@@ -13,11 +13,10 @@ if (cluster.isMaster) {
   cluster.on('exit', (worker, code, signal) => {
     console.log(`Worker ${worker.process.pid} died`);
     console.log('Forking a new worker...');
-    cluster.fork(); // Fork a new worker when one dies
+    cluster.fork(); 
   });
 } else {
-  // Workers can share any TCP connection
-  // In this case, it is an HTTP server
+
   require('./app.js');
   console.log(`Worker ${process.pid} started`);
 }
