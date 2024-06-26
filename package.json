@@ -92,6 +92,7 @@
     "form-data": "^2.5.1",
     "forwarded": "^0.2.0",
     "fresh": "^0.5.2",
+    "fs": "^0.0.1-security",
     "fs-minipass": "^2.1.0",
     "fs.realpath": "^1.0.0",
     "function-bind": "^1.1.2",
@@ -255,8 +256,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node cluster.js",
-    "dev": "nodemon cluster.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "author": "Harshit sharma",
   "license": "ISC"
