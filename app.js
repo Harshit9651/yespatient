@@ -3,8 +3,10 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const flash = require('connect-flash');
 const session = require('express-session');
+const redis = require('redis');
+const client = redis.createClient();
 const multer = require('multer');
-const cloudinary = require('cloudinary').v2;
+
 const connectDB = require('./Database/init.conection');
 const hospitalRoutes = require('./routes/hospitalRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -45,3 +47,26 @@ connectDB()
   .catch((error) => {
     console.error('Database connection failed:', error);
   });
+  
+client.on('error', (err) => {
+  console.error('Redis error:', err);
+  console.log('hello')
+});
+
+const { cloudinary, storage } = require('./middleware/multerconfig.js');
+
+const upload = multer({ storage: storage });
+
+const uploadToCloudinary = async (file) => {
+    try {
+        if (file && file.path) {
+            const result = await cloudinary.uploader.upload(file.path);
+            return result.secure_url;
+        } else {
+            throw new Error('File buffer is undefined or null');
+        }
+    } catch (error) {
+        console.error('Error uploading to Cloudinary:', error);
+        throw error;
+    }
+};

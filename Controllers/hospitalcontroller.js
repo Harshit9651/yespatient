@@ -3,14 +3,11 @@ const fs = require('fs');
 const { validationResult } = require('express-validator');
 const cloudinary = require('cloudinary').v2;
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDNAME,
-  api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECREAT,
-});
-// Upload to Cloudinary
+const Nodecache = require('node-cache')
+const nodecache = new Nodecache();
 const uploadToCloudinary = async (file) => {
   if (file && file.path) {
+    //const result = await cloudinary.uploader.upload(file.buffer.toString('base64'));
     const result = await cloudinary.uploader.upload(file.path);
     return result.secure_url;
   } else {
@@ -25,7 +22,7 @@ exports.rendermainpage = async(req,res)=>{
         res.status(500).json({ error: 'Error showing ejs page ' });
     }
 }
- //find  get resquct data 
+
  exports.renderCityNamePage= async(req,res)=>{
     try{
         res.render('cityname.ejs')
@@ -66,14 +63,6 @@ exports.renderlearnmorePage= async(req,res)=>{
       res.status(500).json({ error: 'Error showing ejs page ' });
   }
 }
-exports.rendershowfile= async(req,res)=>{
-  try{
-      res.render('showfile.ejs')
-  }catch(error){
-      console.error('Error to show  showfile page ', error);
-      res.status(500).json({ error: 'Error showing ejs page ' });
-  }
-}
 
 // Add hospital data
 
@@ -83,45 +72,27 @@ exports.addHospitalData = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  if (!req.file) {
-    return res.status(400).json({ error: 'Please provide an image file' });
-  }
-
-  const filePath = req.file.path;
-  console.log(filePath)
-
-  // Check if the file exists before attempting upload
-  if (!fs.existsSync(filePath)) {
-    return res.status(400).json({ error: 'File not found on server' });
-  }
-
   try {
-    const result = await cloudinary.uploader.upload(filePath);
+    const imageFile = req.files['Image'][0];
+        const IMAGE = await uploadToCloudinary(imageFile);
     const { hospitalName, district, city, pincode } = req.body;
 
     const newHospital = new Hospitals({
       hospitalName,
-      Image: result.secure_url,
+      Image: IMAGE,
       district,
       city,
       pincode,
     });
 
-    await newHospital.save();
+   const data =   await newHospital.save();
+   console.log(data)
     req.flash('successAddHospitalMsg', 'Hospital data saved successfully');
     res.redirect('/');
   } catch (error) {
     console.error('Error saving hospital data:', error);
     res.status(500).json({ error: 'Error saving hospital data' });
-  } finally {
-    // Always delete the file from local storage after uploading to Cloudinary
-    try {
-      fs.unlinkSync(filePath);
-      console.log(`Deleted file: ${filePath}`);
-    } catch (err) {
-      console.error('Error deleting file:', err);
-    }
-  }
+  } 
 };
 // Search hospital by city
 exports.searchByCity = async (req, res) => {
@@ -171,3 +142,4 @@ exports.searchByPincode = async (req, res) => {
     res.status(500).render('error', { error: 'Internal server error' });
   }
 };
+

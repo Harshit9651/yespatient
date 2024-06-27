@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const hospitalController = require('../Controllers/hospitalcontroller.js');
-const upload = require('../middleware/multerconfig.js'); 
 const {isAuthenticate} = require('../middleware/auth.js')
 const { body } = require('express-validator');
+const{upload} = require('../middleware/multerconfig.js')
 
 
 router.post('/addhospital', 
@@ -25,7 +25,7 @@ router.get('/searchbyhospitalname', hospitalController.renderHospitalNamePage);
 router.get('/searchbypincode', hospitalController.renderpincodePage);
 router.get('/daily',isAuthenticate, hospitalController.renderdailypage);
 router.get('/learnmore', hospitalController.renderlearnmorePage);
-router.get('/showfile',hospitalController.rendershowfile)
-router.post('/addhospitaldata',upload.single('Image'),hospitalController.addHospitalData)
-      
+//router.get('/showfile',hospitalController.rendershowfile)
+router.post('/addhospitaldata', upload.fields([{ name: 'Image', maxCount: 1 }]), hospitalController.addHospitalData);
+
 module.exports = router;
